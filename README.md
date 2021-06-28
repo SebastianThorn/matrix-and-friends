@@ -8,7 +8,7 @@ Thing this repo will focus on completing:
 
 # Run ansible-playbook
 ```bash
-ansible-playbook insstall.yaml -i vattenfart.se
+ansible-playbook install.yaml -i vattenfart.se -uroot --diff -v
 ```
 
 # Components
@@ -36,12 +36,6 @@ Creates certificates from Let's Encrypt, you need a domain for this.
 
 ## cert_files
 Moves files to correct locations, this assumes certificates on file.
-
-# IMPORTANT NOTICE
-This is made running on a chromebook, not yet tested on a real virtual machine but this will also be tested.
-
-
-
 
 
 
