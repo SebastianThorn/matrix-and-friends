@@ -3,9 +3,8 @@ This repo provides an easy way of installing components needed to run an isolate
 
 Thing this repo will focus on completing:
 - [ ] Simple way of installing with self-signed certificates
-- [ ] Simple way of installing with certificates from Let's Encrypt
+- [X] Simple way of installing with certificates from Let's Encrypt
 - [ ] Simple way of installing with certificates from files
-- [X] Dummy-Box
 
 # Run ansible-playbook
 ```bash
