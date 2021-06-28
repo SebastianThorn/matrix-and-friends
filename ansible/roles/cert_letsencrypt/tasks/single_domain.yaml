@@ -1,0 +1,45 @@
+---
+
+- name: "Print what domain we are currently handling"
+  ansible.builtin.debug:
+    var: single_domain
+
+- name: "Generate Let's Encrypt CSR"
+  shell: "openssl req -new -sha256 -key /etc/letsencrypt/keys/{{ domain_name }}.key -subj \"/CN={{ single_domain }}\" -reqexts SAN -config <(cat /etc/ssl/openssl.cnf <(printf \"\n[SAN]\nsubjectAltName=DNS:{{ single_domain }}\")) | sudo tee /etc/letsencrypt/csrs/{{ single_domain }}.csr"
+  args:
+    executable: /bin/bash
+
+- name: "Begin Let's Encrypt challenges"
+  community.crypto.acme_certificate:
+    acme_directory: "{{ acme_directory }}"
+    acme_version: "{{ acme_version }}"
+    account_key_src: "{{ letsencrypt_account_key }}"
+    account_email: "{{ acme_email }}"
+    terms_agreed: 1
+    challenge: "{{ acme_challenge_type }}"
+    csr: "{{ letsencrypt_csrs_dir }}/{{ single_domain }}.csr"
+    dest: "{{ letsencrypt_certs_dir }}/{{ single_domain }}.crt"
+    fullchain_dest: "{{ letsencrypt_certs_dir }}/fullchain_{{ single_domain }}.crt"
+    remaining_days: 91
+  register: acme_challenge_your_domain
+
+- name: "Implement http-01 challenge files"
+  copy:
+    content: "{{ acme_challenge_your_domain['challenge_data'][single_domain]['http-01']['resource_value'] }}"
+    dest: "/etc/letsencrypt/server/{{ acme_challenge_your_domain['challenge_data'][single_domain]['http-01']['resource'] }}"
+    owner: root
+    group: root
+    mode: u=rw,g=r,o=r
+
+- name: "Complete Let's Encrypt challenges"
+  community.crypto.acme_certificate:
+    acme_directory: "{{ acme_directory }}"
+    acme_version: "{{ acme_version }}"
+    account_key_src: "{{ letsencrypt_account_key }}"
+    account_email: "{{ acme_email }}"
+    challenge: "{{ acme_challenge_type }}"
+    csr: "{{ letsencrypt_csrs_dir }}/{{ single_domain }}.csr"
+    dest: "{{ letsencrypt_certs_dir }}/{{ single_domain }}.crt"
+    chain_dest: "{{ letsencrypt_certs_dir }}/chain_{{ single_domain }}.crt"
+    fullchain_dest: "{{ letsencrypt_certs_dir }}/fullchain_{{ single_domain }}"
+    data: "{{ acme_challenge_your_domain }}"

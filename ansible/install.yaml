@@ -1,0 +1,18 @@
+---
+
+- name: Install Matrix and friends
+  gather_facts: false
+  hosts: all
+  roles:
+  # Create folders
+  - folders
+
+
+  ## Choose one of these
+  # - cert_selfsigned
+  - cert_letsencrypt
+  #- cert_files
+
+
+  # Install the system
+  # - install
