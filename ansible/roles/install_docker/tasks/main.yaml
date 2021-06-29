@@ -1,0 +1,79 @@
+---
+
+#
+# Disable swap
+- name: Disable swap for current session
+  command: swapoff -a
+  become: true
+
+- name: Disable swap permanently, persist reboots
+  replace:
+    path: /etc/fstab
+    regexp: '^(\s*)([^#\n]+\s+)(\w+\s+)swap(\s+.*)$'
+    replace: '#\1\2\3swap\4'
+    backup: yes
+
+
+#
+# Update repositories cache and install packages
+- name: Update repositories cache and install packages
+  apt:
+    state: present
+    update_cache: yes
+    pkg:
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - gnupg-agent
+      - software-properties-common
+
+
+#
+# Add Dockers gpg-key for deb-packages
+- name: Add Dockers gpg-key for deb-packages
+  apt_key:
+    data: "{{ lookup('file', 'docker.gpg') }}"
+    state: present
+
+
+#
+# Add Dockers repository
+# sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+- name: Add Dockers repository
+  apt_repository:
+    repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable
+    state: present
+
+
+#
+# Update the cache, and install Docker
+- name: Update the cache, and install Docker
+  apt:
+    state: present
+    update_cache: yes
+    pkg:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+      - docker-compose
+
+
+#
+# Create /etc/docker/daemon.json
+- name: Create /etc/docker/daemon.json
+  template:
+    src: daemon.json.j2
+    dest: /etc/docker/daemon.json
+    owner: root
+    group: root
+    mode: '0644'
+
+
+#
+# Restart docker-service
+- name: Restart docker-service
+  ansible.builtin.systemd:
+    state: restarted
+    daemon_reload: yes
+    name: docker
+    enabled: yes
