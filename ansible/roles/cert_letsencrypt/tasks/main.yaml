@@ -34,3 +34,12 @@
   - "riot.{{ base_domain }}"
   loop_control:
     loop_var: single_domain
+
+- name: "Copy certs to matrix-location"
+  ansible.builtin.copy:
+    src: "{{ letsencrypt_certs_dir }}/"
+    dest: "{{ base_install }}/certs/"
+    remote_src: yes
+    owner: 991
+    group: 991
+    mode: '0640'
