@@ -1,0 +1,33 @@
+---
+
+#
+# Create folder for matrix and friends
+- name: Create folder for matrix and friends
+  file:
+    path: "{{ base_install }}"
+    state: directory
+    mode: '0755'
+    owner: 991
+    group: 991
+
+
+#
+# Create certs-folder for matrix and friends
+- name: Create certs-folder for matrix and friends
+  file:
+    path: "{{ base_install }}/certs"
+    state: directory
+    mode: '0755'
+    owner: 991
+    group: 991
+
+
+#
+# Create data-folder for matrix and friends
+- name: Create data-folder for matrix and friends
+  file:
+    path: "{{ base_install }}/data"
+    state: directory
+    mode: '0755'
+    owner: 991
+    group: 991
