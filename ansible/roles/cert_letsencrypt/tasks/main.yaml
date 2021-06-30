@@ -43,3 +43,12 @@
     owner: 991
     group: 991
     mode: '0640'
+
+- name: "Copy key to matrix-location"
+  ansible.builtin.copy:
+    src: "/etc/letsencrypt/keys/{{ domain_name }}.key"
+    dest: "{{ base_install }}/certs/server.key"
+    remote_src: yes
+    owner: 991
+    group: 991
+    mode: '0640'

@@ -5,14 +5,15 @@
   hosts: all
   roles:
   # Create folders
-  - folders
+  # - folders
 
 
   ## Choose one of these
   # - cert_selfsigned
-  - cert_letsencrypt
-  #- cert_files
+  # - cert_letsencrypt
+  # - cert_files
 
 
   # Install the system
-  # - install
+  # - install_docker
+  - install_matrix

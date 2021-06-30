@@ -9,7 +9,6 @@ docker_image_synapse: matrixdotorg/synapse:v1.35.1
 #
 # vattenfart.se
 base_domain: vattenfart.se
-homeserver_config_server_name: "matrix.{{ base_domain }}"
 
 
 #
@@ -24,3 +23,18 @@ letsencrypt_csrs_dir: /etc/letsencrypt/csrs
 letsencrypt_certs_dir: /etc/letsencrypt/certs
 letsencrypt_account_key: /etc/letsencrypt/account/account.key
 domain_name: "{{ base_domain}}"
+
+#
+# Riot variables
+
+# Title in the webapp
+riot_brand: "Vattenfart IM"
+
+riot_default_server_config_m_homeserver_base_url: "https://matrix.{{ base_domain }}"
+riot_default_server_config_m_homeserver_server_name: "{{ riot_brand }}"
+
+riot_default_server_config_m_identity_server_base_url: https://vector.im
+
+riot_disable_guests: "true"
+
+riot_defaultCountryCode: SE
