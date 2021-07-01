@@ -43,15 +43,15 @@ Moves files to correct locations, this assumes certificates on file.
 Don't mind thing below, then are only for my failing memory.
 
 
-
+```bash
 docker run -it --rm --mount type=volume,src=synapse-data,dst=/data \
   -e SYNAPSE_SERVER_NAME=example.org \
   -e SYNAPSE_REPORT_STATS=no matrixdotorg/synapse:v1.35.1 generate
-
+```
 
 matrixdotorg/synapse:v1.35.1
 
-
+```bash
 openssl req -newkey rsa:4096 \
             -x509 \
             -sha256 \
@@ -59,7 +59,9 @@ openssl req -newkey rsa:4096 \
             -nodes \
             -out nginx.crt \
             -keyout nginx.key
+```
 
+```bash
 openssl req \
   -x509 \
   -nodes \
@@ -68,7 +70,7 @@ openssl req \
   -keyout /var/nginx-selfsigned.key \
   -out /var/nginx-selfsigned.crt \
   -subj '/CN=www.mydom.com/O=My Company Name LTD./C=US'
-
+```
 
 
 https://github.com/vector-im/element-web/releases/download/v1.7.30/element-v1.7.30.tar.gz
@@ -83,9 +85,11 @@ https://computingforgeeks.com/generate-openssl-self-signed-certificates-with-ans
 https://www.digitalocean.com/community/tutorials/how-to-acquire-a-let-s-encrypt-certificate-using-ansible-on-ubuntu-18-04
 
 *Federation*
-Looks simple
-https://www.youtube.com/watch?v=dDddKmdLEdg&t=455s
+
+Looks simple, just a file in /.well-known: https://www.youtube.com/watch?v=dDddKmdLEdg&t=455s
 
 *Jitsi in docker*
-This seems to use a lot of components
-https://github.com/jitsi/docker-jitsi-meet
+
+This seems to use a lot of components: https://github.com/jitsi/docker-jitsi-meet
+
+Tons of variables: https://github.com/jitsi/docker-jitsi-meet/blob/master/docker-compose.yml
