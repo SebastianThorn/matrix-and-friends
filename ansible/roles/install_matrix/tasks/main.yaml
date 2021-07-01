@@ -1,0 +1,66 @@
+---
+
+#
+# Generate configuration, this should only be done once.
+- name: Generate configuration
+  shell: |
+    docker run --rm \
+    --mount type=bind,src={{ base_install }}/data,dst=/data \
+    -e SYNAPSE_SERVER_NAME=matrix.{{ base_domain }} \
+    -e SYNAPSE_REPORT_STATS=no matrixdotorg/synapse:v1.35.1 generate
+
+
+#
+# Enable registration
+- name: Enable registration
+  ansible.builtin.lineinfile:
+    path: /usr/local/bin/matrix-and-friends/data/homeserver.yaml
+    regexp: 'enable_registration:'
+    line: 'enable_registration: true'
+
+
+#
+# Create docker-compose
+- name: Create docker-compose
+  template:
+    src: docker-compose.yaml.j2
+    dest: "{{ base_install }}/docker-compose.yaml"
+
+
+#
+# Create nginx-config for default-placeholder
+- name: Create nginx-config for default-placeholder
+  template:
+    src: nginx_default.conf.j2
+    dest: "{{ base_install }}/nginx_default.conf"
+
+
+#
+# Create nginx-config for matrix/synapse
+- name: Create nginx-config for matrix/synapse
+  template:
+    src: nginx_matrix.conf.j2
+    dest: "{{ base_install }}/nginx_matrix.conf"
+
+
+#
+# Create nginx-config for riot
+- name: Create nginx-config for riot
+  template:
+    src: nginx_riot.conf.j2
+    dest: "{{ base_install }}/nginx_riot.conf"
+
+#
+# Create config for riot
+- name: Create config for riot
+  template:
+    src: riot_config.json.j2
+    dest: "{{ base_install }}/riot_config.json"
+
+
+#
+# Start with docker-compose
+- name: Start with docker-compose
+  shell:
+    cmd: docker-compose up -d
+    chdir: "{{ base_install }}"

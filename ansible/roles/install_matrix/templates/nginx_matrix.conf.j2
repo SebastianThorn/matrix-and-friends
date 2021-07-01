@@ -1,0 +1,14 @@
+server {
+    listen      443 ssl;
+    server_name matrix.{{ base_domain }};
+
+    ssl_certificate     /etc/nginx/certs/matrix.{{ base_domain }}.crt;
+    ssl_certificate_key /etc/nginx/certs/server.key;
+
+    access_log /var/log/nginx/access.log;
+    error_log /var/log/nginx/error.log;
+
+    location / {
+        proxy_pass http://maf_synapse:8008;
+    }
+}
