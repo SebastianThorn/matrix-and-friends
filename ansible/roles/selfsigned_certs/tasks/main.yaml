@@ -1,0 +1,40 @@
+---
+
+#
+# Create private-key for matrix, riot, jitsi
+- name: Create private-keys for matrix, riot, jitsi
+  community.crypto.openssl_privatekey:
+    path: "{{ base_install }}/certs/{{ item }}.key"
+    size: 4096
+    type: RSA
+  with_items:
+  - matrix
+  - riot
+  - jitsi
+
+#
+# Create cerificate for matrix, riot, jitsi
+- name: Create cerificate for matrix, riot, jitsi
+  community.crypto.x509_certificate:
+    path: "{{ base_install }}/certs/{{ item }}.crt"
+    privatekey_path: "{{ base_install }}/certs/{{ item }}.key"
+    provider: selfsigned
+    subject:
+      commonName: "{{ item }}.matrix.{{ base_domain }}"
+  with_items:
+  - matrix
+  - riot
+  - jitsi
+
+- meta: end_play
+
+
+
+# openssl req \
+#   -x509 \
+#   -nodes \
+#   -days 365 \
+#   -newkey rsa:4096 \
+#   -keyout /var/nginx-selfsigned.key \
+#   -out /var/nginx-selfsigned.crt \
+#   -subj '/CN=www.mydom.com/O=My Company Name LTD./C=US'
