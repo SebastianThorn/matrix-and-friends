@@ -82,3 +82,10 @@ https://computingforgeeks.com/generate-openssl-self-signed-certificates-with-ans
 
 https://www.digitalocean.com/community/tutorials/how-to-acquire-a-let-s-encrypt-certificate-using-ansible-on-ubuntu-18-04
 
+*Federation*
+Looks simple
+https://www.youtube.com/watch?v=dDddKmdLEdg&t=455s
+
+*Jitsi in docker*
+This seems to use a lot of components
+https://github.com/jitsi/docker-jitsi-meet
